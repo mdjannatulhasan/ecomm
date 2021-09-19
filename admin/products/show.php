@@ -12,7 +12,7 @@ $conn = new PDO("mysql:host=localhost;dbname=ecomm_v1", "root", "");
 // set the PDO error mode to exception
 $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-$query = "SELECT `title`,`short_description` FROM `products` WHERE `id`=:id";
+$query = "SELECT `title`,`short_description`,`picture` FROM `products` WHERE `id`=:id";
 $stmt = $conn->prepare($query);
 $stmt->bindParam(':id', $_id);
 $result = $stmt->execute();
@@ -52,6 +52,15 @@ $products = $stmt->fetch();
                     <div class="col-10">
                         <input type="text" id="details" name="details" class="form-control w-100" value="<?= $products['short_description']?>" disabled>
                     </div>
+                </div>
+                <div class="row g-3 align-items-center justify-content-center mb-3">
+                    <div class="col-2">
+                        <label for="details" class="col-form-label">Picture</label>
+                    </div>
+                    <div class="col-10">
+                        <input type="text" id="picture" name="picture" class="form-control w-100" value="<?= $products['picture']?>" disabled>
+                    </div>
+                    <img src="../../uploads/<?=$products['picture']?>" alt="<?=$products['picture']?>">
                 </div>
             </form>
         </div>

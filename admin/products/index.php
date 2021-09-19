@@ -6,7 +6,7 @@ use App\Utility\Debugger;
 use App\Utility\Sanitizer;
 use App\Utility\Validator;
 use App\Product\product;
-
+session_start();
 $conn = new PDO("mysql:host=localhost;dbname=ecomm_v1", "root", "");
 // set the PDO error mode to exception
 $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -35,6 +35,10 @@ $products = $stmt->fetchAll();
         <div class="container text-center pt-5">
             <h1 class="h1">Products</h1>
             <div class="mx-auto" style="max-width: 700px;">
+                <?php if($_SESSION['message']!= null):?>
+                <h4 class="h4 pt-5 pb-5"><?php echo $_SESSION['message'];$_SESSION['message']=null ?></h4>
+                <?php endif
+                ?>
                 <table class="table">
                     <thead>
                         <tr>
@@ -45,6 +49,7 @@ $products = $stmt->fetchAll();
                     </thead>
                     <tbody>
                         <?php
+                        if(count($products)>0):
                         foreach ($products as $product) :
                         ?>
                             <tr>
@@ -53,11 +58,17 @@ $products = $stmt->fetchAll();
                                 <td> <a href="show.php?id=<?= $product['id'] ?>"> Show </a> | <a href="edit.php?id=<?= $product['id'] ?>"> Edit </a> | <a href="delete.php?id=<?= $product['id'] ?>"> Delete </a></td>
                             </tr>
                         <?php
-                        endforeach
+                        endforeach;
+                        else:
                         ?>
+                        <tr>
+                            <td colspan="2">No Product left</td>
+                        </tr>
+                        <?php endif ?>
                     </tbody>
                 </table>
             </div>
+            <a href="create.php">Add product</a>
         </div>
 
     </section>
