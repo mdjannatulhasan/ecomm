@@ -1,3 +1,24 @@
+<?php
+include_once ($_SERVER['DOCUMENT_ROOT']) . '/ecomm/config.php';
+
+use App\Utility\Utility;
+use App\Utility\Debugger;
+use App\Utility\Sanitizer;
+use App\Utility\Validator;
+use App\Product\product;
+
+$_id = $_GET['id'];
+$conn = new PDO("mysql:host=localhost;dbname=ecomm_v1", "root", "");
+// set the PDO error mode to exception
+$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+$query = "SELECT `title`,`short_description` FROM `products` WHERE `id`=:id";
+$stmt = $conn->prepare($query);
+$stmt->bindParam(':id', $_id);
+$result = $stmt->execute();
+$products = $stmt->fetch();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -15,13 +36,13 @@
         <div class="container text-center pt-5">
             <h1 class="h1">Add New</h1>
 
-            <form action="store.php" method="post" class="mt-5 text-start mx-auto" style="max-width: 700px;">
+            <form action="update.php?id=<?=$_id?>" method="post" class="mt-5 text-start mx-auto" style="max-width: 700px;">
                 <div class="row g-3 align-items-center justify-content-center mb-3">
                     <div class="col-2">
                         <label for="title" class="col-form-label">Title</label>
                     </div> 
                     <div class="col-10">
-                        <input type="text" id="title" name="title" class="form-control w-100">
+                        <input type="text" id="title" name="title" class="form-control w-100" value="<?= $products['title']?>">
                     </div>
                 </div>
                 <div class="row g-3 align-items-center justify-content-center mb-3">
@@ -29,7 +50,7 @@
                         <label for="details" class="col-form-label">Details</label>
                     </div>
                     <div class="col-10">
-                        <input type="text" id="details" name="details" class="form-control w-100">
+                        <input type="text" id="details" name="details" class="form-control w-100" value="<?= $products['short_description']?>">
                     </div>
                 </div>
                 <button type="submit" id="submit" name="submit" class="btn btn-primary">Submit</button> 
