@@ -6,7 +6,7 @@ use App\Utility\Debugger;
 use App\Utility\Sanitizer;
 use App\Utility\Validator;
 use App\Product\product;
-
+session_start();
 $_id = $_GET['id'];
 $conn = new PDO("mysql:host=localhost;dbname=ecomm_v1", "root", "");
 // set the PDO error mode to exception
@@ -17,6 +17,9 @@ $stmt = $conn->prepare($query);
 $stmt->bindParam(':id', $_id);
 $result = $stmt->execute();
 $products = $stmt->fetch();
+if ($products['picture']!=null){
+    $_SESSION['picture']=$products['picture'];
+}
 ?>
 
 <!DOCTYPE html>
@@ -59,7 +62,7 @@ $products = $stmt->fetch();
                     </div>
 
                     <div class="col-10">
-                        <input type="file" accept="image/*" id="picture" name="picture" class="form-control-file w-100">
+                        <input type="file" accept="image/*" id="picture" name="picture" class="form-control-file w-100" value="<?=$products['picture']?>">
                     </div>
                     <img id="imagePre" src="../../uploads/<?=$products['picture']?>" alt="your image" />
                 </div>

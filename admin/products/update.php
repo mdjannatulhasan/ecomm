@@ -10,11 +10,15 @@ session_start();
 $target = $_FILES['picture']['tmp_name'];
 $destination = "../../uploads/".time()."_".$_FILES['picture']['name'];
 $is_moved = move_uploaded_file($target, $destination);
-
+echo $_FILES['picture']['name'];
 if($is_moved){
     $_picture = time()."_".$_FILES['picture']['name'];
+}
+else if($_SESSION['picture']!=null){
+    echo $_SESSION['picture'];
+    $_picture = $_SESSION['picture'];
 }else{
-    $_picture = null; die();
+    $_picture = null;
 }
 
 if(Utility::isPosted()){
